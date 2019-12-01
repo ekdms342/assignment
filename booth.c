@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 int main(void)
 {
 	int Ps, S, Ps2, psbit = 0, sbit = 0, rebit, i = 0, j, z, psbit2 = 0,k=0,si;
@@ -31,12 +31,12 @@ int main(void)
 			if (ps[i] == 2)
 			{
 				ps[i] = 0;
-				ps[i + 1] = 1;
+				ps[i + 1] += 1;
 			}
 			else if (ps[i] == 3)
 			{
 				ps[i] = 1;
-				ps[i + 1] = 1;
+				ps[i + 1] += 1;
 			}
 		}
 		ps[psbit] = 1;//부호bit
@@ -77,12 +77,12 @@ int main(void)
 			if (s[i] == 2)
 			{
 				s[i] = 0;
-				s[i + 1] = 1;
+				s[i + 1] += 1;
 			}
 			else if (s[i] == 3)
 			{
 				s[i] = 1;
-				s[i + 1] = 1;
+				s[i + 1] += 1;
 			}
 		}
 		s[sbit] = 1;//부호bit
@@ -98,6 +98,7 @@ int main(void)
 		}
 		s[sbit] = 0;//부호 bit
 	}
+
 	printf("승수      ");
 	for (i = sbit; i >= 0; i--)// 승수 출력 s는 역으로 저장되어 있음
 	{
@@ -127,12 +128,12 @@ int main(void)
 			if (ps2[i] == 2)
 			{
 				ps2[i] = 0;
-				ps2[i + 1] = 1;
+				ps2[i + 1] += 1;
 			}
 			else if (ps2[i] == 3)
 			{
 				ps2[i] = 1;
-				ps2[i + 1] = 1;
+				ps2[i + 1] += 1;
 			}
 		}
 		ps2[psbit2] = 1;//부호bit
@@ -217,10 +218,10 @@ int main(void)
 		{
 			printf("%d %d", s[sbit], s[sbit + 1]); //승수 출력
 			printf("  ");
-			printf("-");
+			printf("+");
 			for (i = rebit + 1; i >= 0; i--)//피승수(ps2) 출력
 			{
-				printf("%d", ps[i]);
+				printf("%d", ps2[i]);
 			}
 			printf("\n");
 			j = 0;
