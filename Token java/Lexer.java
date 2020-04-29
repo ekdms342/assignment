@@ -1,4 +1,4 @@
-// Lexer.java
+// Lexer.java // 토큰 생성
 // Lexical analyzer for Clite, as discusssed in Chapter 3
 // Lexical analyzer modified for S
 
@@ -13,6 +13,7 @@ public class Lexer {
     private final String letters = "abcdefghijklmnopqrstuvwxyz"
         + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private final String digits = "0123456789";
+    private final String logics = "=" + "!" + ">" + "<";
     private final char eolnCh = '\n';
 
     public Lexer (String fileName) { // source filename
@@ -51,11 +52,36 @@ public class Lexer {
         do {
             if (isLetter(ch)) { // ident 
                 String spelling = concat(letters + digits);
+                System.out.println(spelling);
                 return Token.mkIdentTok(spelling);
             } else if (isDigit(ch)) { // int 
                 String number = concat(digits);
                 return Token.mkIntLiteral(number);
-            } else 
+            } else if(isLogical(ch)){
+            	String logic = concat(logics);
+            	if(logic.equals("!"))
+            	{
+            		return Token.notTok;
+            	}else if(logic.equals("!="))
+            	{
+            		return Token.notsameTok;
+            	}else if(logic.equals("=="))
+            	{
+            		return Token.sameTok;
+            	}else if(logic.equals(">"))
+            	{
+            		return Token.rightAngleTok;
+            	}else if(logic.equals("<"))
+            	{
+            		return Token.leftAngleTok;
+            	}else if(logic.equals(">="))
+            	{
+            		return Token.rightsameTok;
+            	}else if(logic.equals("<="))
+            	{
+            		return Token.leftsameTok;
+            	}
+            }else
 			switch (ch) {
             case ' ': case '\t': case '\r': case eolnCh:
                 ch = nextChar();
@@ -67,7 +93,10 @@ public class Lexer {
             
 //            case eofCh:  case '.': 
 //				return Token.eofTok;
-            
+            case '&': ch = nextChar();
+                return Token.ampersandTok;
+            case '|': ch = nextChar();
+                return Token.verti_barTok;
             case '+': ch = nextChar();
                 return Token.plusTok;
             case '-': ch = nextChar();
@@ -93,6 +122,11 @@ public class Lexer {
         return (c>='0' && c<='9'); 
     }
 
+    private boolean isLogical (char c) {
+    	
+    	return (c>='<' && c<= '>' || c == '!');
+    }
+    
     private String concat(String set) {
         String r = "";
         do {

@@ -9,6 +9,7 @@ public class Parser {
     Token token;          // current token from the input stream
     Lexer lexer;
     String funcId = "";
+    int check = 0;
 
     public Parser(Lexer ts) throws IOException { // Open the Clite source program
         lexer = ts;				// as a token stream, and
@@ -30,27 +31,127 @@ public class Parser {
 		else
 			System.out.println(";is required");
 	}
-	
-	private void expr() throws IOException {
-		term();
-		while(token.type() == TokenType.Plus) {
-			getToken();
-			term();
-		}
+    
+    
+
+    private void expr() throws IOException
+    {
+        bexp();
+        if(token.type() == TokenType.Ampersand || token.type() == TokenType.Verti_bar)
+        {
+            if(token.type() == TokenType.Ampersand)
+            {
+                while(token.type() == TokenType.Ampersand) 
+                {
+                    getToken();
+                    bexp();
+                }
+            }else if(token.type() == TokenType.Verti_bar)
+            {
+                while(token.type() == TokenType.Verti_bar) 
+                {
+                    getToken();
+                    bexp();
+                }
+            }
+        }else if(token.type() == TokenType.Not)
+        {
+            getToken();
+            expr();
+        }else if(token.type() == TokenType.True)
+        {
+            getToken();
+        }else if(token.type() == TokenType.False)
+        {
+            getToken();
+        }
+        
+    }
+
+    private void bexp() throws IOException
+    {
+        aexp();
+        relop();
+        if(check != 0)
+        {
+            aexp();
+        }
+    }
+    
+    private void relop() throws IOException
+    {
+        if(token.type() == TokenType.Same)
+        {
+            getToken();
+            check +=1;
+            
+        }else if(token.type() == TokenType.Notsame)
+        {
+            getToken();
+            check +=1;
+        }else if(token.type() == TokenType.LeftAngle)
+        {
+            getToken();
+            check +=1;
+        }else if(token.type() == TokenType.RightAngle)
+        {
+            getToken();
+            check +=1;
+        }else if(token.type() == TokenType.Leftsame)
+        {
+            getToken();
+            check +=1;
+        }else if(token.type() == TokenType.Rightsame)
+        {
+            getToken();
+            check +=1;
+        }
+    }
+   
+    private void aexp() throws IOException {
+        term();
+        if(token.type() == TokenType.Plus)
+        {
+            while(token.type() == TokenType.Plus) 
+            {
+                getToken();
+                term();
+            }
+        }else if(token.type() == TokenType.Minus)
+        {
+            while(token.type() == TokenType.Minus) 
+            {
+			    getToken();
+			    term();
+	        }
+        }
+		
 	}
 	
 	private void term() throws IOException {
-		factor();
-		while(token.type() == TokenType.Multiply) {
-			getToken();
-			factor();
-		}
+        factor();
+        if(token.type() == TokenType.Multiply)
+        {
+           while(token.type() == TokenType.Multiply) 
+            {
+			    getToken();
+			    factor();
+		    } 
+        }else if(token.type() == TokenType. Divide)
+        {
+            while(token.type() == TokenType.Divide) 
+            {
+			    getToken();
+			    factor();
+		    } 
+        }
+		
 	}
 	
-	private void factor() throws IOException {
+	private void factor() throws IOException {//- 옵션 붙이기
 		if (token.type() == TokenType.LeftParen) {
 			getToken();
-			expr();
+			aexp();
 			if(token.type() == TokenType.RightParen) getToken();
 			else {
 				System.out.println(")is required");
